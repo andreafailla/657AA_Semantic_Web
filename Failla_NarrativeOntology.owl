@@ -1,0 +1,756 @@
+@prefix : <http://www.semanticweb.org/andreafailla/ontologies/2021/exam#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix dctypes: <http://purl.org/dc/dcmitype/> .
+@base <http://www.semanticweb.org/andreafailla/ontologies/2021/exam> .
+
+<http://www.semanticweb.org/andreafailla/ontologies/2021/exam> rdf:type owl:Ontology .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#hasCharacter
+:hasCharacter rdf:type owl:ObjectProperty ;
+              rdfs:subPropertyOf :hasParticipant ;
+              owl:inverseOf :isCharacterOf ;
+              rdfs:domain dctypes:Event ;
+              rdfs:range :Character ;
+              rdfs:comment "An Event has a Character as one of its Participants."@en ;
+              rdfs:label "hasCharacter"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#hasContractWith
+:hasContractWith rdf:type owl:ObjectProperty ;
+                 owl:inverseOf :hasContractWith ;
+                 rdf:type owl:SymmetricProperty ;
+                 rdfs:domain [ rdf:type owl:Class ;
+                               owl:unionOf ( :Narrator
+                                             :Publisher
+                                           )
+                             ] ;
+                 rdfs:range [ rdf:type owl:Class ;
+                              owl:unionOf ( :Narrator
+                                            :Publisher
+                                          )
+                            ] ;
+                 owl:propertyChainAxiom ( :isNarratorOf
+                                          :isReportedIn
+                                          :hasPublisher
+                                        ) ;
+                 rdfs:comment "A Narrator or Publisher has a contract with a Publisher or Narrator."@en ;
+                 rdfs:label "hasContractWith"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#hasEvent
+:hasEvent rdf:type owl:ObjectProperty ;
+          owl:inverseOf :isEventOf ;
+          rdfs:domain :Narrative ;
+          rdfs:range dctypes:Event ;
+          rdfs:comment "A Narrative contains an Event."@en ;
+          rdfs:label "hasEvent"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#hasLocation
+:hasLocation rdf:type owl:ObjectProperty ;
+             owl:inverseOf :isLocationOf ;
+             rdf:type owl:FunctionalProperty ;
+             rdfs:domain dctypes:Event ;
+             rdfs:range dctypes:Location ;
+             rdfs:comment "An Event takes place at a Location."@en ;
+             rdfs:label "hasLocation"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#hasNarrative
+:hasNarrative rdf:type owl:ObjectProperty ;
+              owl:inverseOf :isReportedIn ;
+              rdfs:domain :Book ;
+              rdfs:range :Narrative ;
+              rdfs:comment "A Book contains a Narrative."@en ;
+              rdfs:label "hasNarrative"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#hasNarrator
+:hasNarrator rdf:type owl:ObjectProperty ;
+             owl:inverseOf :isNarratorOf ;
+             rdfs:domain :Narrative ;
+             rdfs:range :Narrator ;
+             rdfs:comment "A Narrative was written by a Narrator."@en ;
+             rdfs:label "hasNarrator"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#hasObject
+:hasObject rdf:type owl:ObjectProperty ;
+           rdfs:subPropertyOf :hasParticipant ;
+           owl:inverseOf :isObjectOf ;
+           rdfs:domain dctypes:Event ;
+           rdfs:range :Object ;
+           rdfs:comment "An Event has an Object as one of its Participants."@en ;
+           rdfs:label "hasObject"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#hasParticipant
+:hasParticipant rdf:type owl:ObjectProperty ;
+                owl:inverseOf :isParticipantOf ;
+                rdfs:domain dctypes:Event ;
+                rdfs:range [ rdf:type owl:Class ;
+                             owl:unionOf ( :Character
+                                           :Object
+                                         )
+                           ] ;
+                rdfs:comment "An Event has a Character or Object as one of its Participants."@en ;
+                rdfs:label "hasParticipant"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#hasPublisher
+:hasPublisher rdf:type owl:ObjectProperty ;
+              owl:inverseOf :isPublisherOf ;
+              rdf:type owl:FunctionalProperty ;
+              rdfs:domain :Book ;
+              rdfs:range :Publisher ;
+              rdfs:comment "A Book was published by a Publisher."@en ;
+              rdfs:label "hasPublisher"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#isCharacterOf
+:isCharacterOf rdf:type owl:ObjectProperty ;
+               rdfs:subPropertyOf :isParticipantOf ;
+               rdfs:domain :Character ;
+               rdfs:range dctypes:Event ;
+               rdfs:comment "A Character participates in an Event."@en ;
+               rdfs:label "isCharacterOf"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#isEventOf
+:isEventOf rdf:type owl:ObjectProperty ,
+                    owl:FunctionalProperty ;
+           rdfs:domain dctypes:Event ;
+           rdfs:range :Narrative ;
+           rdfs:comment "An Event is a section of a Narrative."@en ;
+           rdfs:label "isEventOf"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#isLocationOf
+:isLocationOf rdf:type owl:ObjectProperty ;
+              rdfs:subPropertyOf owl:topObjectProperty ;
+              rdf:type owl:InverseFunctionalProperty ;
+              rdfs:domain dctypes:Location ;
+              rdfs:range dctypes:Event ;
+              rdfs:comment "A Location is the place where an Event takes place."@en ;
+              rdfs:label "isLocationOf"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#isNarratorOf
+:isNarratorOf rdf:type owl:ObjectProperty ;
+              rdfs:domain :Narrator ;
+              rdfs:range :Narrative ;
+              rdfs:comment "A Narrator wrote a Narrative."@en ;
+              rdfs:label "isNarratorOf"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#isObjectOf
+:isObjectOf rdf:type owl:ObjectProperty ;
+            rdfs:subPropertyOf :isParticipantOf ;
+            rdfs:domain :Object ;
+            rdfs:range dctypes:Event ;
+            rdfs:comment "An Object participates in an Event."@en ;
+            rdfs:label "isObjectOf"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#isParticipantOf
+:isParticipantOf rdf:type owl:ObjectProperty ;
+                 rdfs:domain [ rdf:type owl:Class ;
+                               owl:unionOf ( :Character
+                                             :Object
+                                           )
+                             ] ;
+                 rdfs:range dctypes:Event ;
+                 rdfs:comment "A Character or Object participates in an Event."@en ;
+                 rdfs:label "isParticipantOF"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#isPublisherOf
+:isPublisherOf rdf:type owl:ObjectProperty ,
+                        owl:InverseFunctionalProperty ;
+               rdfs:domain :Publisher ;
+               rdfs:range :Book ;
+               rdfs:comment "A Publisher publishes a Book."@en ;
+               rdfs:label "isPublisherOf"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#isReportedIn
+:isReportedIn rdf:type owl:ObjectProperty ;
+              rdfs:domain :Narrative ;
+              rdfs:range :Book ;
+              rdfs:comment "A Narrative is reported in a Book."@en ;
+              rdfs:label "isReportedIn"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#sellsItemsOf
+:sellsItemsOf rdf:type owl:ObjectProperty ;
+              owl:inverseOf :sellsThrough ;
+              rdfs:domain :Bookshop ;
+              rdfs:range :Publisher ;
+              rdfs:comment "A Bookshop sells items of a Publisher."@en ;
+              rdfs:label "sellsItemsOf"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#sellsThrough
+:sellsThrough rdf:type owl:ObjectProperty ;
+              rdfs:domain :Publisher ;
+              rdfs:range :Bookshop ;
+              rdfs:comment "A Publisher sells its items via a Bookshop."@en ;
+              rdfs:label "sellsThrough"^^xsd:string .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#hasBeginning
+:hasBeginning rdf:type owl:DatatypeProperty ,
+                       owl:FunctionalProperty ;
+              rdfs:domain dctypes:Event ;
+              rdfs:range xsd:dateTime ;
+              rdfs:comment "An Event begins at a specific date and time (datetime)."@en ;
+              rdfs:label "hasBeginning"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#hasEnding
+:hasEnding rdf:type owl:DatatypeProperty ,
+                    owl:FunctionalProperty ;
+           rdfs:domain dctypes:Event ;
+           rdfs:range xsd:dateTime ;
+           rdfs:comment "An Event ends at a specific date and time (datetime)."@en ;
+           rdfs:label "hasEnding"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#hasID
+:hasID rdf:type owl:DatatypeProperty ,
+                owl:FunctionalProperty ;
+       rdfs:domain :Publisher ;
+       rdfs:range xsd:positiveInteger ;
+       rdfs:comment "A Publisher has an ID (positive integer)."@en ;
+       rdfs:label "hasID"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#hasISBN
+:hasISBN rdf:type owl:DatatypeProperty ,
+                  owl:FunctionalProperty ;
+         rdfs:domain :Book ;
+         rdfs:range xsd:string ;
+         rdfs:comment "A Book has an ISBN code (positive integer)."@en ;
+         rdfs:label "hasISBN"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#hasLegalName
+:hasLegalName rdf:type owl:DatatypeProperty ;
+              rdfs:subPropertyOf owl:topDataProperty ;
+              rdf:type owl:FunctionalProperty ;
+              rdfs:domain :Publisher ;
+              rdfs:range xsd:string ;
+              rdfs:comment "A Publisher has a legal name (string)."@en .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#hasName
+:hasName rdf:type owl:DatatypeProperty ;
+         rdfs:domain [ rdf:type owl:Class ;
+                       owl:unionOf ( dctypes:Location
+                                     :Character
+                                     :Object
+                                   )
+                     ] ;
+         rdfs:range xsd:string ;
+         rdfs:comment "A Character, Object, Location or Publisher has a Name (string)."@en ;
+         rdfs:label "hasName"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#hasPrice
+:hasPrice rdf:type owl:DatatypeProperty ,
+                   owl:FunctionalProperty ;
+          rdfs:domain :Book ;
+          rdfs:range xsd:positiveInteger ;
+          rdfs:comment "A Book has a Price (Positive integer)."@en ;
+          rdfs:label "hasPrice"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#hasTitle
+:hasTitle rdf:type owl:DatatypeProperty ;
+          rdfs:domain :Book ;
+          rdfs:range xsd:string ;
+          rdfs:comment "A Book has a Title (string)."@en ;
+          rdfs:label "hasTitle"^^xsd:string .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://purl.org/dc/dcmitype/Event
+dctypes:Event rdf:type owl:Class ;
+              rdfs:subClassOf :NarrativeConcept ,
+                              [ rdf:type owl:Class ;
+                                owl:unionOf ( [ owl:intersectionOf ( [ rdf:type owl:Restriction ;
+                                                                       owl:onProperty :hasCharacter ;
+                                                                       owl:someValuesFrom :Character
+                                                                     ]
+                                                                     [ rdf:type owl:Restriction ;
+                                                                       owl:onProperty :hasObject ;
+                                                                       owl:someValuesFrom :Object
+                                                                     ]
+                                                                   ) ;
+                                                rdf:type owl:Class
+                                              ]
+                                              [ rdf:type owl:Restriction ;
+                                                owl:onProperty :hasCharacter ;
+                                                owl:someValuesFrom :Character
+                                              ]
+                                              [ rdf:type owl:Restriction ;
+                                                owl:onProperty :hasObject ;
+                                                owl:someValuesFrom :Object
+                                              ]
+                                            )
+                              ] ,
+                              [ rdf:type owl:Restriction ;
+                                owl:onProperty :hasLocation ;
+                                owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                owl:onClass dctypes:Location
+                              ] ,
+                              [ rdf:type owl:Restriction ;
+                                owl:onProperty :hasBeginning ;
+                                owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                owl:onDataRange xsd:dateTime
+                              ] ,
+                              [ rdf:type owl:Restriction ;
+                                owl:onProperty :hasEnding ;
+                                owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                owl:onDataRange xsd:dateTime
+                              ] ;
+              rdfs:comment "A non-persistent, time-based occurrence. Source: dublincore.org ."@en ;
+              rdfs:label "Event"^^xsd:string .
+
+
+###  http://purl.org/dc/dcmitype/Location
+dctypes:Location rdf:type owl:Class ;
+                 rdfs:subClassOf :NarrativeConcept ,
+                                 [ rdf:type owl:Restriction ;
+                                   owl:onProperty :hasName ;
+                                   owl:someValuesFrom xsd:string
+                                 ] ;
+                 owl:disjointUnionOf ( :FictionalLocation
+                                       :RealLocation
+                                     ) ;
+                 rdfs:comment "A spatial region or named place. Source: dublincore.org ."@en ;
+                 rdfs:label "Location"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Book
+:Book rdf:type owl:Class ;
+      rdfs:subClassOf [ rdf:type owl:Restriction ;
+                        owl:onProperty :hasNarrative ;
+                        owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                        owl:onClass :Narrative
+                      ] ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty :hasPublisher ;
+                        owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                        owl:onClass :Publisher
+                      ] ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty :hasTitle ;
+                        owl:someValuesFrom xsd:string
+                      ] ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty :hasISBN ;
+                        owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                        owl:onDataRange xsd:string
+                      ] ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty :hasPrice ;
+                        owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                        owl:onDataRange xsd:positiveInteger
+                      ] ;
+      rdfs:comment "A collection of (one or more) Narratives."@en ;
+      rdfs:label "Book"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Bookshop
+:Bookshop rdf:type owl:Class ;
+          rdfs:subClassOf foaf:Organization ;
+          rdfs:comment "An Organization concerning the selling of books."@en ;
+          rdfs:label "Bookshop"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Character
+:Character rdf:type owl:Class ;
+           rdfs:subClassOf :NarrativeConcept ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty :hasName ;
+                             owl:someValuesFrom xsd:string
+                           ] ;
+           owl:disjointUnionOf ( :HumanCharacter
+                                 :NonHumanCharacter
+                               ) ;
+           rdfs:comment "A person taking part in a narrative event."@en ;
+           rdfs:label "Character"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#FictionalLocation
+:FictionalLocation rdf:type owl:Class ;
+                   rdfs:subClassOf dctypes:Location ;
+                   rdfs:comment "A spatial region or named place of a fictional world."@en ;
+                   rdfs:label "FictionalLocation"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#HumanCharacter
+:HumanCharacter rdf:type owl:Class ;
+                rdfs:subClassOf :Character ;
+                rdfs:comment "A human Character."@en ;
+                rdfs:label "HumanCharacter"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Narrative
+:Narrative rdf:type owl:Class ;
+           rdfs:subClassOf [ rdf:type owl:Restriction ;
+                             owl:onProperty :hasEvent ;
+                             owl:someValuesFrom dctypes:Event
+                           ] ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty :hasEvent ;
+                             owl:allValuesFrom dctypes:Event
+                           ] ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty :hasNarrator ;
+                             owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                             owl:onClass :Narrator
+                           ] ;
+           rdfs:comment "A story written by a Narrator, mainly in textual format."@en ;
+           rdfs:label "Narrative"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#NarrativeConcept
+:NarrativeConcept rdf:type owl:Class ;
+                  rdfs:comment "A set of concepts which are fundamental to a Narrative."@en ;
+                  rdfs:label "NarrativeConcept"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Narrator
+:Narrator rdf:type owl:Class ;
+          rdfs:subClassOf foaf:Person ,
+                          [ rdf:type owl:Restriction ;
+                            owl:onProperty :hasContractWith ;
+                            owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                            owl:onClass :Publisher
+                          ] ;
+          rdfs:comment "A Person who writes a Narrative."@en ;
+          rdfs:label "Narrator"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#NonHumanCharacter
+:NonHumanCharacter rdf:type owl:Class ;
+                   rdfs:subClassOf :Character ;
+                   rdfs:comment "A non-human Character"@en ;
+                   rdfs:label "Non-HumanCharacter"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Object
+:Object rdf:type owl:Class ;
+        rdfs:subClassOf :NarrativeConcept ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty :hasName ;
+                          owl:someValuesFrom xsd:string
+                        ] ;
+        rdfs:comment "An element taking part in a narrative event."@en ;
+        rdfs:label "Object"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Publisher
+:Publisher rdf:type owl:Class ;
+           rdfs:subClassOf foaf:Organization ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty :isPublisherOf ;
+                             owl:minQualifiedCardinality "2"^^xsd:nonNegativeInteger ;
+                             owl:onClass :Book
+                           ] ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty :sellsThrough ;
+                             owl:minQualifiedCardinality "2"^^xsd:nonNegativeInteger ;
+                             owl:onClass :Bookshop
+                           ] ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty :hasID ;
+                             owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                             owl:onDataRange xsd:positiveInteger
+                           ] ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty :hasLegalName ;
+                             owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                             owl:onDataRange xsd:string
+                           ] ;
+           rdfs:comment "An Organization concerning the issue of books."@en ;
+           rdfs:label "Publisher"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#RealLocation
+:RealLocation rdf:type owl:Class ;
+              rdfs:subClassOf dctypes:Location ;
+              rdfs:comment "A spatial region or named place of the real world."@en ;
+              rdfs:label "RealLocation"^^xsd:string .
+
+
+###  http://xmlns.com/foaf/0.1/Organization
+foaf:Organization rdf:type owl:Class ;
+                  owl:disjointWith foaf:Person ;
+                  rdfs:comment "The Organization class represents a kind of Agent corresponding to social instititutions such as companies, societies etc. Source: xmlns.com/foaf/spec/"@en ;
+                  rdfs:label "Organization"^^xsd:string .
+
+
+###  http://xmlns.com/foaf/0.1/Person
+foaf:Person rdf:type owl:Class ;
+            rdfs:comment "The Person class represents people. Something is a Person if it is a person. Source: xmlns.com/foaf/spec/"^^xsd:string ;
+            rdfs:label "Person"^^xsd:string .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Book1
+:Book1 rdf:type owl:NamedIndividual ,
+                :Book ;
+       :hasNarrative :Narrative1 ,
+                     :Narrative2 ;
+       :hasISBN "11111111111"^^xsd:string ;
+       :hasPrice "10"^^xsd:positiveInteger ;
+       :hasTitle "This is a book title"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Book2
+:Book2 rdf:type owl:NamedIndividual ,
+                :Book ;
+       :hasISBN "2222222222"^^xsd:string ;
+       :hasPrice "10"^^xsd:positiveInteger ;
+       :hasTitle "A very good book"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Book3
+:Book3 rdf:type owl:NamedIndividual ,
+                :Book ;
+       :hasISBN "3333333333"^^xsd:string ;
+       :hasPrice "15"^^xsd:positiveInteger ;
+       :hasTitle "This one is boring!"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Book4
+:Book4 rdf:type owl:NamedIndividual ,
+                :Book ;
+       :hasISBN "4444444444"^^xsd:string ;
+       :hasPrice "15"^^xsd:positiveInteger ;
+       :hasTitle "Yet another love story"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Book5
+:Book5 rdf:type owl:NamedIndividual ,
+                :Book ;
+       :hasPublisher :Publisher3 ;
+       :hasISBN "5555555555"^^xsd:string ;
+       :hasPrice "1"^^xsd:positiveInteger ;
+       :hasTitle "What the Government won't tell you"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Book6
+:Book6 rdf:type owl:NamedIndividual ,
+                :Book ;
+       :hasPublisher :Publisher3 ;
+       :hasISBN "6666666666"^^xsd:string ;
+       :hasPrice "20"^^xsd:positiveInteger ;
+       :hasTitle "A book: nothing else to say – at least I'm honest"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Bookshop1
+:Bookshop1 rdf:type owl:NamedIndividual ,
+                    :Bookshop ;
+           :sellsItemsOf :Publisher1 ,
+                         :Publisher2 .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Bookshop2
+:Bookshop2 rdf:type owl:NamedIndividual ,
+                    :Bookshop .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Character1
+:Character1 rdf:type owl:NamedIndividual ,
+                     :HumanCharacter .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Character2
+:Character2 rdf:type owl:NamedIndividual ,
+                     :HumanCharacter ;
+            :isCharacterOf :Event5 .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Character3
+:Character3 rdf:type owl:NamedIndividual ,
+                     :HumanCharacter .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Character4
+:Character4 rdf:type owl:NamedIndividual ,
+                     :NonHumanCharacter .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Character5
+:Character5 rdf:type owl:NamedIndividual ,
+                     :NonHumanCharacter .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Event1
+:Event1 rdf:type owl:NamedIndividual ,
+                 dctypes:Event ;
+        :hasCharacter :Character1 ;
+        :hasLocation :Location1 ;
+        :hasBeginning "2000-01-01T00:00:00"^^xsd:dateTime ;
+        :hasEnding "2000-01-02T00:00:00"^^xsd:dateTime .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Event2
+:Event2 rdf:type owl:NamedIndividual ,
+                 dctypes:Event ;
+        :hasCharacter :Character1 ;
+        :hasLocation :Location1 .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Event3
+:Event3 rdf:type owl:NamedIndividual ,
+                 dctypes:Event ;
+        :hasCharacter :Character3 ;
+        :hasLocation :Location1 .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Event4
+:Event4 rdf:type owl:NamedIndividual ,
+                 dctypes:Event ;
+        :hasCharacter :Character4 ,
+                      :Character5 ;
+        :hasObject :Object1 .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Event5
+:Event5 rdf:type owl:NamedIndividual ,
+                 dctypes:Event ;
+        :isEventOf :Narrative4 .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Location1
+:Location1 rdf:type owl:NamedIndividual ,
+                    :RealLocation ;
+           :hasName "The Place Where Stuff Happens"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Location2
+:Location2 rdf:type owl:NamedIndividual ,
+                    :FictionalLocation ;
+           :isLocationOf :Event4 .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Narrative1
+:Narrative1 rdf:type owl:NamedIndividual ,
+                     :Narrative ;
+            :hasEvent :Event1 ,
+                      :Event2 ;
+            :hasNarrator :Narrator1 .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Narrative2
+:Narrative2 rdf:type owl:NamedIndividual ,
+                     :Narrative ;
+            :hasEvent :Event3 ;
+            :hasNarrator :Narrator1 .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Narrative3
+:Narrative3 rdf:type owl:NamedIndividual ,
+                     :Narrative ;
+            :hasEvent :Event4 ;
+            :isReportedIn :Book5 .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Narrative4
+:Narrative4 rdf:type owl:NamedIndividual ,
+                     :Narrative .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Narrator1
+:Narrator1 rdf:type owl:NamedIndividual ,
+                    :Narrator ;
+           :hasContractWith :Publisher1 .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Narrator2
+:Narrator2 rdf:type owl:NamedIndividual ,
+                    :Narrator ;
+           :isNarratorOf :Narrative3 .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Object1
+:Object1 rdf:type owl:NamedIndividual ,
+                  :Object .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Object2
+:Object2 rdf:type owl:NamedIndividual ,
+                  :Object ;
+         :isObjectOf :Event1 .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Publisher1
+:Publisher1 rdf:type owl:NamedIndividual ,
+                     :Publisher ;
+            :isPublisherOf :Book1 ,
+                           :Book2 ;
+            :hasID "6987"^^xsd:positiveInteger ;
+            :hasLegalName "Pub Lisher"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Publisher2
+:Publisher2 rdf:type owl:NamedIndividual ,
+                     :Publisher ;
+            :isPublisherOf :Book3 ,
+                           :Book4 ;
+            :hasID "2455"^^xsd:positiveInteger ;
+            :hasLegalName "P. U. Blisher"^^xsd:string .
+
+
+###  http://www.semanticweb.org/andreafailla/ontologies/2021/exam#Publisher3
+:Publisher3 rdf:type owl:NamedIndividual ,
+                     :Publisher ;
+            :sellsThrough :Bookshop2 ;
+            :hasID "8564"^^xsd:positiveInteger ;
+            :hasLegalName "Pub Lee Sher"^^xsd:string .
+
+
+#################################################################
+#    General axioms
+#################################################################
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( dctypes:Event
+                dctypes:Location
+                :Book
+                :Bookshop
+                :Character
+                :Narrative
+                :Narrator
+                :Object
+                :Publisher
+              )
+] .
+
+
+###  Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi
